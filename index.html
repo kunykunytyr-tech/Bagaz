@@ -1,0 +1,2787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BAGAZ TRACKING SYSTEM</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+  
+.analyze-icon{
+    width:100px;
+    height:100px;
+    margin:0 auto 15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+    border-radius:15px;
+
+    border:1px solid #ff5555;
+
+    background:#120606;
+
+    box-shadow:
+        0 0 10px rgba(255,0,0,.45),
+        0 0 25px rgba(255,0,0,.20);
+}
+
+.analyze-icon img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    border-radius:15px;
+}
+
+/* FOTO DI HEADER TRACKING */
+
+.tracking-logo{
+    width:100%;
+    max-width:260px;
+    height:150px;
+
+    margin:0 auto 18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+    border-radius:12px;
+
+    border:1px solid #ff5555;
+
+    background:#120606;
+
+    box-shadow:
+        0 0 12px rgba(255,0,0,.35),
+        0 0 25px rgba(255,0,0,.15);
+}
+
+.tracking-logo img{
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+    border-radius:12px;
+}
+
+/*/ VIDEO /*/
+
+  .tracking-header {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #000;
+}
+
+.tracking-video {
+  display: block;
+  width: 75%;
+  height: auto;
+  max-height: 350px;
+  object-fit: contain;
+  background: #000;
+  margin: 0 auto;
+}
+  
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+
+    font-family:Consolas,monospace;
+
+    color:#ffe4e4;
+
+    background:
+        linear-gradient(
+            rgba(10,0,0,.35),
+            rgba(10,0,0,.35)
+        ),
+        url("img/gg1.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    background-repeat:no-repeat;
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+.page{
+    width:100%;
+    max-width:1050px;
+    margin:auto;
+    padding:25px 15px;
+}
+
+.hidden{
+    display:none !important;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.main-title{
+    text-align:center;
+
+    color:#ff6b6b;
+
+    font-size:30px;
+
+    letter-spacing:6px;
+
+    margin:10px 0 25px;
+
+    text-shadow:
+        0 0 8px #ff3030,
+        0 0 20px #d40000,
+        0 0 35px #8b0000;
+}
+
+
+/* =====================================================
+   ANALYZE BOX
+===================================================== */
+
+.analyze-box{
+
+    max-width:620px;
+
+    margin:auto;
+
+    padding:30px 20px;
+
+    text-align:center;
+
+    border-radius:16px;
+
+    border:1px solid #ff3b3b;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(127,29,29,.40),
+            rgba(20,8,8,.92)
+        );
+
+    box-shadow:
+        0 0 30px rgba(255,0,0,.20),
+        inset 0 0 25px rgba(255,50,50,.05);
+}
+
+.analyze-icon{
+
+    font-size:48px;
+
+    margin-bottom:10px;
+
+    filter:
+        drop-shadow(
+            0 0 12px #ff2020
+        );
+}
+
+.analyze-subtitle{
+
+    color:#ffb4b4;
+
+    font-size:14px;
+
+    margin-bottom:22px;
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.phone-input{
+
+    width:100%;
+
+    max-width:450px;
+
+    padding:16px;
+
+    border-radius:9px;
+
+    border:1px solid #ff5252;
+
+    background:#100505;
+
+    color:#ffe4e4;
+
+    text-align:center;
+
+    font-size:16px;
+
+    outline:none;
+}
+
+.phone-input:focus{
+
+    border-color:#ff8a8a;
+
+    box-shadow:
+        0 0 15px
+        rgba(255,50,50,.35);
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.main-btn{
+
+    width:100%;
+
+    max-width:450px;
+
+    padding:15px;
+
+    margin-top:15px;
+
+    border-radius:9px;
+
+    border:1px solid #ff8585;
+
+    background:
+        linear-gradient(
+            135deg,
+            #991b1b,
+            #dc2626
+        );
+
+    color:white;
+
+    font-weight:bold;
+
+    letter-spacing:2px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    box-shadow:
+        0 0 12px
+        rgba(255,0,0,.25);
+}
+
+.main-btn:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #b91c1c,
+            #ef4444
+        );
+
+    box-shadow:
+        0 0 22px
+        rgba(255,40,40,.5);
+}
+
+
+/* =====================================================
+   DISCLAIMER
+===================================================== */
+
+.disclaimer{
+
+    margin:25px auto 0;
+
+    max-width:550px;
+
+    padding:15px;
+
+    border-left:3px solid #ff4d4d;
+
+    background:
+        rgba(30,8,8,.65);
+
+    color:#d1a3a3;
+
+    font-size:11px;
+
+    line-height:1.7;
+
+    text-align:left;
+}
+
+.disclaimer strong{
+
+    color:#ff9b9b;
+}
+
+
+/* =====================================================
+   MADE BY
+===================================================== */
+
+.made-by{
+
+    margin-top:18px;
+
+    text-align:center;
+
+    color:#ff6666;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    text-shadow:
+        0 0 8px
+        rgba(255,0,0,.5);
+}
+
+
+/* =====================================================
+   LOADER
+===================================================== */
+
+.loader{
+
+    width:32px;
+
+    height:32px;
+
+    margin:20px auto 10px;
+
+    border-radius:50%;
+
+    border:3px solid #421414;
+
+    border-top:3px solid #ff5555;
+
+    animation:
+        spin 1s linear infinite;
+
+    display:none;
+}
+
+@keyframes spin{
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+.progress{
+
+    width:100%;
+
+    max-width:450px;
+
+    height:7px;
+
+    margin:10px auto;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    background:#351313;
+
+    display:none;
+}
+
+.progress-bar{
+
+    width:0%;
+
+    height:100%;
+
+    background:#ff3030;
+
+    box-shadow:
+        0 0 12px #ff0000;
+
+    transition:.15s;
+}
+
+
+/* =====================================================
+   TRACKING HEADER
+===================================================== */
+
+.tracking-header{
+
+    text-align:center;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    border:1px solid #ff3838;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(127,29,29,.40),
+            rgba(20,8,8,.85)
+        );
+
+    box-shadow:
+        0 0 25px
+        rgba(255,0,0,.20);
+}
+
+.tracking-title{
+
+    font-size:24px;
+
+    color:#ffb1b1;
+
+    letter-spacing:3px;
+
+    text-shadow:
+        0 0 12px #ff2020;
+}
+
+.live-status{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    padding:6px 13px;
+
+    border-radius:20px;
+
+    border:1px solid #ff5555;
+
+    background:#3a0e0e;
+
+    color:#ff8a8a;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+.map-card{
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border-radius:15px;
+
+    border:1px solid #632525;
+
+    background:#180b0b;
+
+    box-shadow:
+        0 0 25px
+        rgba(255,0,0,.13);
+}
+
+.section-title{
+
+    color:#ff6666;
+
+    font-size:13px;
+
+    letter-spacing:2px;
+
+    margin:5px 0 12px;
+}
+
+#map{
+
+    width:100%;
+
+    height:440px;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    border:1px solid #7f3030;
+
+    position:relative;
+}
+
+
+/* =====================================================
+   THREE SIGNAL CIRCLES
+===================================================== */
+
+.signal-ring{
+
+    position:absolute;
+
+    width:45px;
+
+    height:45px;
+
+    top:50%;
+
+    left:50%;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.2);
+
+    border-radius:50%;
+
+    border:3px solid #ff2d2d;
+
+    box-shadow:
+        0 0 12px #ff0000,
+        inset 0 0 8px #ff0000;
+
+    pointer-events:none;
+
+    z-index:700;
+
+    animation:
+        signalPulse 3s infinite;
+}
+
+
+/* 3 RING BERURUTAN */
+
+.signal-ring:nth-child(2){
+
+    animation-delay:1s;
+}
+
+.signal-ring:nth-child(3){
+
+    animation-delay:2s;
+}
+
+
+@keyframes signalPulse{
+
+    0%{
+
+        transform:
+            translate(-50%,-50%)
+            scale(.2);
+
+        opacity:1;
+
+    }
+
+    65%{
+
+        transform:
+            translate(-50%,-50%)
+            scale(3.8);
+
+        opacity:.7;
+
+    }
+
+    100%{
+
+        transform:
+            translate(-50%,-50%)
+            scale(5);
+
+        opacity:0;
+
+    }
+
+}
+
+
+/* =====================================================
+   TARGET
+===================================================== */
+
+.target{
+
+    width:17px;
+
+    height:17px;
+
+    background:#ff2020;
+
+    border:2px solid white;
+
+    border-radius:50%;
+
+    position:relative;
+
+    box-shadow:
+        0 0 10px #ff0000,
+        0 0 25px #ff0000;
+}
+
+
+/* =====================================================
+   DEVICE CARD
+===================================================== */
+
+.device-card{
+
+    margin-top:20px;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    border:1px solid #632525;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1d0d0d,
+            #100707
+        );
+
+    box-shadow:
+        0 0 25px
+        rgba(255,0,0,.13);
+}
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:10px;
+}
+
+.info-item{
+
+    padding:13px;
+
+    border-radius:8px;
+
+    background:#160909;
+
+    border:1px solid #472020;
+}
+
+.info-label{
+
+    display:block;
+
+    color:#9f6868;
+
+    font-size:10px;
+
+    letter-spacing:1px;
+
+    margin-bottom:5px;
+}
+
+.info-value{
+
+    color:#ffe1e1;
+
+    font-size:14px;
+
+    word-break:break-word;
+}
+
+.moving{
+
+    color:#ffb020 !important;
+}
+
+.stationary{
+
+    color:#55ff99 !important;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.actions{
+
+    margin-top:15px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:10px;
+}
+
+.action-btn{
+
+    width:100%;
+
+    margin:0;
+
+    padding:13px;
+
+    border-radius:8px;
+
+    border:1px solid #ff5656;
+
+    background:#451515;
+
+    color:#ffe1e1;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.action-btn:hover{
+
+    background:#991b1b;
+
+    box-shadow:
+        0 0 15px
+        rgba(255,0,0,.35);
+}
+
+.back-btn{
+
+    width:100%;
+
+    margin-top:12px;
+
+    background:#241111;
+
+    border-color:#784040;
+}
+
+
+/* =====================================================
+   DEVICE PAGE
+===================================================== */
+
+.device-page{
+
+    max-width:700px;
+
+    margin:auto;
+
+    padding:25px 15px;
+}
+
+.device-actions{
+
+    margin-top:15px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:10px;
+}
+
+.danger-btn{
+
+    background:#421116;
+
+    border-color:#ff5555;
+}
+
+.danger-btn:hover{
+
+    background:#991b1b;
+}
+
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+.popup-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(10,0,0,.82);
+
+    backdrop-filter:
+        blur(7px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:9999;
+}
+
+.popup{
+
+    width:100%;
+
+    max-width:420px;
+
+    padding:23px;
+
+    border-radius:15px;
+
+    border:1px solid #ff5555;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2b1010,
+            #0d0505
+        );
+
+    box-shadow:
+        0 0 35px
+        rgba(255,0,0,.4);
+}
+
+.popup-title{
+
+    color:#ffb0b0;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    letter-spacing:2px;
+
+    margin-bottom:8px;
+}
+
+.popup-text{
+
+    color:#cda3a3;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+    margin-bottom:15px;
+}
+
+.popup-input{
+
+    width:100%;
+
+    padding:13px;
+
+    margin-bottom:10px;
+
+    border-radius:8px;
+
+    border:1px solid #653030;
+
+    background:#100505;
+
+    color:#ffe4e4;
+
+    outline:none;
+}
+
+.popup-input:focus{
+
+    border-color:#ff5555;
+
+    box-shadow:
+        0 0 12px
+        rgba(255,0,0,.25);
+}
+
+.popup-error{
+
+    min-height:18px;
+
+    color:#ff8989;
+
+    font-size:11px;
+}
+
+.popup-buttons{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+
+    margin-top:10px;
+}
+
+.popup-buttons button{
+
+    width:100%;
+
+    margin:0;
+}
+
+
+/* =====================================================
+   RINGING
+===================================================== */
+
+.ringing-icon{
+
+    width:90px;
+
+    height:90px;
+
+    margin:10px auto 20px;
+
+    border-radius:50%;
+
+    border:2px solid #ff5555;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:40px;
+
+    animation:
+        ringShake .25s infinite;
+
+    box-shadow:
+        0 0 20px
+        rgba(255,0,0,.5);
+}
+
+@keyframes ringShake{
+
+    0%{
+        transform:rotate(-8deg);
+    }
+
+    50%{
+        transform:rotate(8deg);
+    }
+
+    100%{
+        transform:rotate(-8deg);
+    }
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer{
+
+    text-align:center;
+
+    margin:28px 0 5px;
+
+    color:#ff6262;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    letter-spacing:2px;
+
+    text-shadow:
+        0 0 10px
+        rgba(255,0,0,.5);
+}
+
+.footer small{
+
+    display:block;
+
+    margin-top:7px;
+
+    color:#875858;
+
+    font-size:9px;
+
+    font-weight:normal;
+
+    letter-spacing:1px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .page{
+
+        padding:
+            18px 11px;
+
+    }
+
+    .main-title{
+
+        font-size:23px;
+
+        letter-spacing:4px;
+
+    }
+
+    .tracking-title{
+
+        font-size:19px;
+
+    }
+
+    #map{
+
+        height:350px;
+
+    }
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .actions{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .device-actions{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .footer{
+
+        font-size:13px;
+
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     ANALYZE PAGE
+===================================================== -->
+
+<div id="analyzePage" class="page">
+
+    <h1 class="main-title">
+        TRACKING SYSTEM
+    </h1>
+
+    <div class="analyze-box">
+
+        <div class="analyze-icon">
+    <img src="img/trx.jpg" alt="TRX">
+        </div>
+      
+        <div class="analyze-subtitle">
+            SIGNAL ANALYSIS & TRACKING SYSTEM
+        </div>
+
+        <input
+            id="phoneInput"
+            class="phone-input"
+            type="tel"
+            placeholder="Enter target number..."
+        >
+
+        <button
+            class="main-btn"
+            onclick="startScan()"
+        >
+            ANALYZE SIGNAL
+        </button>
+
+        <div id="loader" class="loader"></div>
+
+        <div id="progress" class="progress">
+            <div id="bar" class="progress-bar"></div>
+        </div>
+
+        <div class="disclaimer">
+
+            <strong>⚠ IMPORTANT NOTICE</strong><br><br>
+
+            جميع معلومات الجهاز المعروضة،
+والإحداثيات، وبيانات الشبكة، وحركة الجهاز
+مخصصة لأغراض العرض التوضيحي.
+
+تم تصميم هذا التطبيق لعرض مفهوم
+تتبع الأجهزة من خلال رقم هاتف مسجل،
+مع ميزات التحكم بالجهاز مثل
+تشغيل الصوت، وقفل الجهاز،
+وإعادة ضبط المصنع، وإدارة الأجهزة.
+
+            <br><br>
+
+            All displayed device information,
+coordinates, network data and movement
+are provided for demonstration purposes.
+
+This application is designed to demonstrate
+device tracking through a registered phone number,
+with device control features such as
+play sound, lock device, factory reset,
+and device management.
+
+        </div>
+
+        <div class="made-by">
+            - MADE BY BAGAZ -
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TRACKING PAGE
+===================================================== -->
+
+<div
+    id="trackingPage"
+    class="page hidden"
+>
+
+    <div class="tracking-header">
+  <video
+    class="tracking-video"
+    autoplay
+    muted
+    loop
+    playsinline
+  >
+    <source src="video/gg1.mp4" type="video/mp4">
+  </video>
+
+  <div class="live-status">● SIGNAL LOCKED</div>
+    </div>
+
+    </div>
+
+
+    <!-- MAP -->
+
+    <div class="map-card">
+
+        <div class="section-title">
+            LIVE LOCATION
+        </div>
+
+        <div id="map"></div>
+
+    </div>
+
+
+    <!-- DEVICE INFO -->
+
+    <div class="device-card">
+
+        <div class="section-title">
+            TARGET INFORMATION
+        </div>
+
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    DEVICE
+                </span>
+
+                <span
+                    id="deviceName"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    OPERATING SYSTEM
+                </span>
+
+                <span
+                    id="deviceOS"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    LOCATION
+                </span>
+
+                <span
+                    id="locationName"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    MOVEMENT
+                </span>
+
+                <span
+                    id="movement"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    LATITUDE
+                </span>
+
+                <span
+                    id="latitude"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    LONGITUDE
+                </span>
+
+                <span
+                    id="longitude"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    BATTERY
+                </span>
+
+                <span
+                    id="battery"
+                    class="info-value"
+                >
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    NETWORK
+                </span>
+
+                <span class="info-value">
+                    4G LTE
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="actions">
+
+            <button
+                class="action-btn"
+                onclick="openGoogleMaps()"
+            >
+                🗺 GOOGLE MAPS
+            </button>
+
+            <button
+                class="action-btn"
+                onclick="openGoogleEarth()"
+            >
+                🌍 GOOGLE EARTH
+            </button>
+
+            <button
+                class="action-btn"
+                onclick="openDeviceStatus()"
+            >
+                📱 DEVICE STATUS
+            </button>
+
+        </div>
+
+
+        <button
+            class="action-btn back-btn"
+            onclick="backToAnalyze()"
+        >
+            ← BACK
+        </button>
+
+    </div>
+
+
+    <div class="footer">
+
+        ⚡ ADVANCED SIGNAL TRACKING ACTIVATED - BAGAZ
+
+        <small>
+            TRACKING SYSTEM •  DEVICE LOCKER
+        </small>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DEVICE STATUS PAGE
+===================================================== -->
+
+<div
+    id="devicePage"
+    class="device-page hidden"
+>
+
+    <h1 class="main-title">
+        DEVICE STATUS
+    </h1>
+
+
+    <div class="device-card">
+
+        <div class="section-title">
+            DEVICE INFORMATION
+        </div>
+
+        <div id="deviceDetail"></div>
+
+    </div>
+
+
+    <div class="device-card">
+
+        <div class="section-title">
+            DEVICE ACTIONS
+        </div>
+
+        <div class="device-actions">
+
+            <button
+                class="action-btn"
+                onclick="showLockPopup()"
+            >
+                🔒 LOCK DEVICE
+            </button>
+
+            <button
+                class="action-btn"
+                onclick="showRingPopup()"
+            >
+                🔊 RING DEVICE
+            </button>
+
+            <button
+                class="action-btn danger-btn"
+                onclick="showResetPopup()"
+            >
+                ⚠ FACTORY RESET
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="action-btn back-btn"
+        onclick="backToTracking()"
+    >
+        ← BACK TO TRACKING
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     POPUP
+===================================================== -->
+
+<div
+    id="popupOverlay"
+    class="popup-overlay hidden"
+>
+
+    <div
+        id="popupBox"
+        class="popup"
+    ></div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let map = null;
+
+let marker = null;
+
+let movementTimer = null;
+
+let currentCoord = null;
+
+let currentDevice = null;
+
+let currentLocation = null;
+
+let audioContext = null;
+
+let ringTimer = null;
+
+
+/* =====================================================
+   DEVICES
+===================================================== */
+
+const devices = [
+
+    {
+        name:"Samsung Galaxy A51",
+        os:"Android"
+    },
+
+    {
+        name:"Xiaomi Redmi Note 10",
+        os:"Android"
+    },
+
+    {
+        name:"OPPO A54",
+        os:"Android"
+    },
+
+    {
+        name:"Vivo Y20",
+        os:"Android"
+    },
+
+    {
+        name:"Realme 8",
+        os:"Android"
+    },
+
+    {
+        name:"Huawei P30",
+        os:"Android"
+    },
+
+    {
+        name:"iPhone 11",
+        os:"iOS"
+    }
+
+];
+
+
+/* =====================================================
+   LOCATIONS
+   MEDAN = 60%
+   JAKARTA = 20%
+   BANDUNG = 20%
+===================================================== */
+
+const locations = [
+
+    {
+        name:"Medan",
+        lat:3.5952,
+        lng:98.6722,
+        weight:6
+    },
+
+    {
+        name:"Jakarta",
+        lat:-6.2088,
+        lng:106.8456,
+        weight:2
+    },
+
+    {
+        name:"Bandung",
+        lat:-6.9175,
+        lng:107.6191,
+        weight:2
+    }
+
+];
+
+
+/* =====================================================
+   RANDOM LOCATION
+===================================================== */
+
+function getRandomLocation(){
+
+    let total = 0;
+
+    locations.forEach(
+        item => total += item.weight
+    );
+
+    let random =
+        Math.random() * total;
+
+
+    for(let item of locations){
+
+        random -= item.weight;
+
+        if(random <= 0){
+
+            return {
+
+                name:item.name,
+
+                lat:
+                    item.lat +
+                    (Math.random() - .5) * .12,
+
+                lng:
+                    item.lng +
+                    (Math.random() - .5) * .12
+
+            };
+
+        }
+
+    }
+
+    return locations[0];
+
+}
+
+
+/* =====================================================
+   RANDOM BATTERY
+===================================================== */
+
+function randomBattery(){
+
+    return Math.floor(
+        Math.random() * 76
+    ) + 20;
+
+}
+
+
+/* =====================================================
+   START SCAN
+===================================================== */
+
+function startScan(){
+
+    const input =
+        document.getElementById(
+            "phoneInput"
+        ).value.trim();
+
+
+    if(input.length < 8){
+
+        showSimplePopup(
+            "INVALID INPUT",
+            "Please enter a valid number with at least 8 digits."
+        );
+
+        return;
+
+    }
+
+
+    document.querySelector(
+        ".main-btn"
+    ).disabled = true;
+
+
+    document.getElementById(
+        "loader"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "progress"
+    ).style.display = "block";
+
+
+    const bar =
+        document.getElementById("bar");
+
+
+    let width = 0;
+
+
+    const scan =
+        setInterval(() => {
+
+            width += 4;
+
+            bar.style.width =
+                width + "%";
+
+
+            if(width >= 100){
+
+                clearInterval(scan);
+
+                document.getElementById(
+                    "loader"
+                ).style.display = "none";
+
+                document.getElementById(
+                    "progress"
+                ).style.display = "none";
+
+                bar.style.width = "0%";
+
+                document.querySelector(
+                    ".main-btn"
+                ).disabled = false;
+
+                showTracking();
+
+            }
+
+        },70);
+
+}
+
+
+/* =====================================================
+   SHOW TRACKING
+===================================================== */
+
+function showTracking(){
+
+    document.getElementById(
+        "analyzePage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "trackingPage"
+    ).classList.remove("hidden");
+
+
+    currentDevice =
+        devices[
+            Math.floor(
+                Math.random() *
+                devices.length
+            )
+        ];
+
+
+    currentLocation =
+        getRandomLocation();
+
+
+    currentCoord = {
+
+        lat:currentLocation.lat,
+
+        lng:currentLocation.lng
+
+    };
+
+
+    document.getElementById(
+        "deviceName"
+    ).textContent =
+        currentDevice.name;
+
+
+    document.getElementById(
+        "deviceOS"
+    ).textContent =
+        currentDevice.os;
+
+
+    document.getElementById(
+        "locationName"
+    ).textContent =
+        currentLocation.name;
+
+
+    document.getElementById(
+        "battery"
+    ).textContent =
+        randomBattery() + "%";
+
+
+    const isMoving =
+        Math.random() < .2;
+
+
+    updateMovement(isMoving);
+
+
+    clearInterval(
+        movementTimer
+    );
+
+
+    if(isMoving){
+
+        movementTimer =
+            setInterval(
+                moveTarget,
+                5000
+            );
+
+    }
+
+
+    initMap();
+
+}
+
+
+/* =====================================================
+   MOVEMENT STATUS
+===================================================== */
+
+function updateMovement(isMoving){
+
+    const el =
+        document.getElementById(
+            "movement"
+        );
+
+
+    if(isMoving){
+
+        el.textContent =
+            "MOVING";
+
+        el.className =
+            "info-value moving";
+
+    }else{
+
+        el.textContent =
+            "STATIONARY";
+
+        el.className =
+            "info-value stationary";
+
+    }
+
+}
+
+
+/* =====================================================
+   MOVE TARGET
+===================================================== */
+
+function moveTarget(){
+
+    currentCoord.lat +=
+        (Math.random() - .5) * .003;
+
+
+    currentCoord.lng +=
+        (Math.random() - .5) * .003;
+
+
+    updateCoordinates();
+
+
+    if(marker){
+
+        marker.setLatLng([
+
+            currentCoord.lat,
+
+            currentCoord.lng
+
+        ]);
+
+    }
+
+
+    if(map){
+
+        map.panTo(
+
+            [
+                currentCoord.lat,
+                currentCoord.lng
+            ],
+
+            {
+                animate:true,
+                duration:1
+            }
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   COORDINATES
+===================================================== */
+
+function updateCoordinates(){
+
+    document.getElementById(
+        "latitude"
+    ).textContent =
+        currentCoord.lat.toFixed(6);
+
+
+    document.getElementById(
+        "longitude"
+    ).textContent =
+        currentCoord.lng.toFixed(6);
+
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+function initMap(){
+
+    if(map){
+
+        map.remove();
+
+        map = null;
+
+    }
+
+
+    map =
+        L.map("map")
+        .setView(
+
+            [
+                currentCoord.lat,
+                currentCoord.lng
+            ],
+
+            14
+
+        );
+
+
+    L.tileLayer(
+
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+
+        {
+            maxZoom:19,
+            attribution:"Esri"
+        }
+
+    ).addTo(map);
+
+
+    /*
+       3 SIGNAL RINGS
+    */
+
+    for(let i = 0; i < 3; i++){
+
+        const ring =
+            document.createElement(
+                "div"
+            );
+
+        ring.className =
+            "signal-ring";
+
+
+        document.getElementById(
+            "map"
+        ).appendChild(ring);
+
+    }
+
+
+    /*
+       RED TARGET
+    */
+
+    marker =
+        L.marker(
+
+            [
+                currentCoord.lat,
+                currentCoord.lng
+            ],
+
+            {
+
+                icon:
+                    L.divIcon({
+
+                        html:
+                            '<div class="target"></div>',
+
+                        iconSize:
+                            [20,20],
+
+                        className:""
+
+                    })
+
+            }
+
+        ).addTo(map);
+
+
+    updateCoordinates();
+
+
+    setTimeout(() => {
+
+        map.flyTo(
+
+            [
+                currentCoord.lat,
+                currentCoord.lng
+            ],
+
+            16,
+
+            {
+                duration:2.5
+            }
+
+        );
+
+    },500);
+
+}
+
+
+/* =====================================================
+   GOOGLE MAPS
+===================================================== */
+
+function openGoogleMaps(){
+
+    if(!currentCoord){
+
+        return;
+
+    }
+
+
+    const url =
+        "https://www.google.com/maps/search/?api=1&query=" +
+        currentCoord.lat +
+        "," +
+        currentCoord.lng;
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+/* =====================================================
+   GOOGLE EARTH
+===================================================== */
+
+function openGoogleEarth(){
+
+    if(!currentCoord){
+
+        return;
+
+    }
+
+
+    const url =
+        "https://earth.google.com/web/@" +
+        currentCoord.lat +
+        "," +
+        currentCoord.lng +
+        ",500a,1000d,35y,0h,0t,0r";
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+/* =====================================================
+   DEVICE STATUS
+===================================================== */
+
+function openDeviceStatus(){
+
+    document.getElementById(
+        "trackingPage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "devicePage"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "deviceDetail"
+    ).innerHTML = `
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    DEVICE
+                </span>
+
+                <span class="info-value">
+                    ${currentDevice.name}
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    OS
+                </span>
+
+                <span class="info-value">
+                    ${currentDevice.os}
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    BATTERY
+                </span>
+
+                <span class="info-value">
+                    ${randomBattery()}%
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    NETWORK
+                </span>
+
+                <span class="info-value">
+                    4G LTE
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    STATUS
+                </span>
+
+                <span class="info-value stationary">
+                    CONNECTED
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   LOCK POPUP
+===================================================== */
+
+function showLockPopup(){
+
+    openPopup(`
+
+        <div class="popup-title">
+            🔒 LOCK DEVICE
+        </div>
+
+        <div class="popup-text">
+
+            Create a simulated device
+            security PIN.
+
+            <br><br>
+
+            Minimum 6 digits required.
+
+        </div>
+
+
+        <input
+            id="lockPin"
+            class="popup-input"
+            type="password"
+            inputmode="numeric"
+            maxlength="12"
+            placeholder="Enter PIN..."
+        >
+
+
+        <input
+            id="lockMessage"
+            class="popup-input"
+            type="text"
+            maxlength="80"
+            placeholder="Enter lock message..."
+        >
+
+
+        <div
+            id="popupError"
+            class="popup-error"
+        ></div>
+
+
+        <div class="popup-buttons">
+
+            <button
+                class="action-btn"
+                onclick="closePopup()"
+            >
+                CANCEL
+            </button>
+
+
+            <button
+                class="action-btn"
+                onclick="confirmLock()"
+            >
+                LOCK
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =====================================================
+   CONFIRM LOCK
+===================================================== */
+
+function confirmLock(){
+
+    const pin =
+        document.getElementById(
+            "lockPin"
+        ).value.trim();
+
+
+    const message =
+        document.getElementById(
+            "lockMessage"
+        ).value.trim();
+
+
+    const error =
+        document.getElementById(
+            "popupError"
+        );
+
+
+    if(!/^\d{6,}$/.test(pin)){
+
+        error.textContent =
+            "PIN must contain at least 6 digits.";
+
+        return;
+
+    }
+
+
+    closePopup();
+
+
+    setTimeout(() => {
+
+        showSimplePopup(
+
+            "DEVICE LOCKED",
+
+            `Simulation completed.
+
+            <br><br>
+
+            Security PIN accepted.
+
+            <br>
+
+            Message:
+            ${message || "No message specified."}
+
+            <br><br>
+
+            ${currentDevice.name}
+            is now shown as LOCKED.`
+
+        );
+
+    },100);
+
+}
+
+
+/* =====================================================
+   RING POPUP
+===================================================== */
+
+function showRingPopup(){
+
+    openPopup(`
+
+        <div class="ringing-icon">
+            📱
+        </div>
+
+
+        <div
+            class="popup-title"
+            style="text-align:center"
+        >
+            RINGING DEVICE
+        </div>
+
+
+        <div
+            class="popup-text"
+            style="text-align:center"
+        >
+
+            ${currentDevice.name}
+
+            <br><br>
+
+            Simulated ringing signal active.
+
+        </div>
+
+
+        <button
+            class="action-btn"
+            onclick="stopRinging()"
+        >
+            ⏹ STOP RINGING
+        </button>
+
+    `);
+
+
+    startRinging();
+
+}
+
+
+/* =====================================================
+   START RINGING
+===================================================== */
+
+function startRinging(){
+
+    stopRinging();
+
+
+    try{
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+
+        let count = 0;
+
+
+        ringTimer =
+            setInterval(() => {
+
+                if(count >= 12){
+
+                    stopRinging();
+
+                    return;
+
+                }
+
+
+                playBeep();
+
+                count++;
+
+            },900);
+
+    }
+
+    catch(e){
+
+        console.log(
+            "Audio not available."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BEEP
+===================================================== */
+
+function playBeep(){
+
+    if(!audioContext){
+
+        return;
+
+    }
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        650,
+        audioContext.currentTime
+    );
+
+
+    oscillator.frequency.linearRampToValueAtTime(
+        900,
+        audioContext.currentTime + .15
+    );
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        audioContext.currentTime
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .15,
+        audioContext.currentTime + .03
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        audioContext.currentTime + .35
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start();
+
+    oscillator.stop(
+        audioContext.currentTime + .4
+    );
+
+}
+
+
+/* =====================================================
+   STOP RINGING
+===================================================== */
+
+function stopRinging(){
+
+    if(ringTimer){
+
+        clearInterval(
+            ringTimer
+        );
+
+        ringTimer = null;
+
+    }
+
+
+    if(audioContext){
+
+        audioContext.close()
+        .catch(() => {});
+
+        audioContext = null;
+
+    }
+
+
+    /*
+       CLOSE RING POPUP
+       AND RETURN TO DEVICE STATUS
+    */
+
+    document.getElementById(
+        "popupOverlay"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "trackingPage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "devicePage"
+    ).classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+   SIMPLE POPUP
+===================================================== */
+
+function showSimplePopup(
+    title,
+    message
+){
+
+    openPopup(`
+
+        <div class="popup-title">
+            ${title}
+        </div>
+
+
+        <div class="popup-text">
+            ${message}
+        </div>
+
+
+        <button
+            class="action-btn"
+            onclick="closePopup()"
+        >
+            OK
+        </button>
+
+    `);
+
+}
+
+
+/* =====================================================
+   RESET POPUP
+===================================================== */
+
+function showResetPopup(){
+
+    openPopup(`
+
+        <div class="popup-title">
+            ⚠ FACTORY RESET
+        </div>
+
+
+        <div class="popup-text">
+
+            This feature is simulation only.
+
+            <br><br>
+
+            No real device data will be
+            modified or deleted.
+
+            <br><br>
+
+            Continue with the simulation?
+
+        </div>
+
+
+        <div class="popup-buttons">
+
+            <button
+                class="action-btn"
+                onclick="closePopup()"
+            >
+                CANCEL
+            </button>
+
+
+            <button
+                class="action-btn danger-btn"
+                onclick="confirmReset()"
+            >
+                RESET
+            </button>
+
+        </div>
+
+    `);
+
+}
+
+
+/* =====================================================
+   CONFIRM RESET
+===================================================== */
+
+function confirmReset(){
+
+    closePopup();
+
+
+    setTimeout(() => {
+
+        showSimplePopup(
+
+            "RESET COMPLETE",
+
+            "Simulation only.<br><br>" +
+
+            currentDevice.name +
+
+            " has been reset in the interface."
+
+        );
+
+    },100);
+
+}
+
+
+/* =====================================================
+   OPEN POPUP
+===================================================== */
+
+function openPopup(html){
+
+    document.getElementById(
+        "popupBox"
+    ).innerHTML = html;
+
+
+    document.getElementById(
+        "popupOverlay"
+    ).classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE POPUP
+===================================================== */
+
+function closePopup(){
+
+    document.getElementById(
+        "popupOverlay"
+    ).classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =====================================================
+   BACK TO TRACKING
+===================================================== */
+
+function backToTracking(){
+
+    closePopup();
+
+
+    document.getElementById(
+        "devicePage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "trackingPage"
+    ).classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+   BACK TO ANALYZE
+===================================================== */
+
+function backToAnalyze(){
+
+    clearInterval(
+        movementTimer
+    );
+
+
+    movementTimer = null;
+
+
+    if(map){
+
+        map.remove();
+
+        map = null;
+
+    }
+
+
+    marker = null;
+
+
+    document.getElementById(
+        "trackingPage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "devicePage"
+    ).classList.add("hidden");
+
+
+    document.getElementById(
+        "analyzePage"
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "phoneInput"
+    ).value = "";
+
+}
+
+</script>
+
+</body>
+</html>
